@@ -1,0 +1,50 @@
+{% extends "stock/base.html" %}
+{% block 'body' %}
+  <!-- Breadcrumb-->
+  <ul class="breadcrumb">
+    <div class="container-fluid">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item active">Tables</li>
+    </div>
+  </ul>
+<section class="tables">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h3 class="h4">{{title}}</h3>
+            </div>
+            <div class="card-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                      <th>#</th>
+                    {% for col in cols%}
+                        <th>{{col}}</th>
+                    {% endfor %}
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for obj in list %}
+                    <tr>
+                        <th scope="row">{{obj.id}}</th>
+                        {% for value in obj.get_array_value %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                        <td>
+                            <a href="{{ modificar }}/{{obj.id}}"><button type="button" class="btn btn-primary">Modificar</button></a>
+                            <a href="{{ eliminar }}/{{obj.id}}"><button type="button" class="btn btn-secondary">Eliminar</button></a>
+                        </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock %}

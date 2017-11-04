@@ -1,0 +1,82 @@
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bootstrap Dashboard by Bootstrapious.com</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'stock/css/bootstrap.min.css' %}">
+    <!-- Google fonts - Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="{% static 'stock/css/style.blue.css' %}" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="{% static 'stock/css/custom.css' %}">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="{% static 'stock/img/favicon.ico' %}">
+    <!-- Font Awesome CDN-->
+    <!-- you can replace it by local Font Awesome-->
+    <script src="{% static 'stock/js/99347ac47f.js' %}"></script>
+
+    <!-- Font Icons CSS-->
+    <link rel="stylesheet" href="{% static 'stock/css/icons.css' %}">
+
+  </head>
+  <body>
+    <div class="page home-page">
+       {% include 'stock/nav_menu.html'%}
+      <div class="page-content d-flex align-items-stretch">
+        <!-- Side Navbar -->
+         {% include 'stock/sidebar_menu.html'%}
+
+          <div class="content-inner">
+            <header class="page-header">
+              <div class="container-fluid">
+                <div class="form-group row">
+                  <h2 class=" col-sm-1 no-margin-bottom">Sucursal</h2>
+                  <div class="col-md-4 select">
+                    <select name="account" class="form-control">
+                        <option value="">----------</option>
+                        {% for sucursal in reques.user.sucursales %}
+                          <option value="{{ sucursal.id }}">{{ sucursal.direccion }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </header>
+          {% block 'body' %}
+          {% endblock %}
+          <!-- Page Footer-->
+              <footer class="main-footer">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <p>Your company &copy; 2017-2019</p>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                      <p>Design by <a href="https://bootstrapious.com/admin-templates" class="external">Bootstrapious</a></p>
+                      <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+                    </div>
+                  </div>
+                </div>
+              </footer>
+          </div>
+      </div>
+    </div>
+
+    <!-- Javascript files-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="{% static 'stock/js/tether.min.js' %}"></script>
+    <script src="{% static 'stock/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'stock/js/jquery.cookie.js' %}"> </script>
+    <script src="{% static 'stock/js/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'stock/js/front.js' %}"></script>
+
+    {% block 'js' %}
+    {% endblock %}
+  </body>
+</html>

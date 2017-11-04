@@ -1,0 +1,54 @@
+{% extends 'stock/base_internal.html' %}
+{% load static %}
+{% block 'body' %}
+    <div class="page login-page">
+      <div class="container d-flex align-items-center">
+        <div class="form-holder has-shadow">
+          <div class="row">
+            <!-- Logo & Information Panel-->
+            <div class="col-lg-6">
+              <div class="info d-flex align-items-center">
+                <div class="content">
+                  <div class="logo">
+                    <h1>Dashboard</h1>
+                  </div>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                </div>
+              </div>
+            </div>
+            <!-- Form Panel    -->
+            <div class="col-lg-6 bg-white">
+              <div class="form d-flex align-items-center">
+                <div class="content">
+                  <form id="register-form" action="." method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <input id="register-first-name" type="text" name="first_name" required class="input-material">
+                      <label for="register-first-name" class="label-material">Nombre      </label>
+                    </div>
+                    <div class="form-group">
+                      <input id="register-last-name" type="text" name="last_name" required class="input-material">
+                      <label for="register-last-name" class="label-material">Apellido      </label>
+                    </div>
+                    <div class="form-group">
+                      <input id="register-email" type="email" name="email" required class="input-material">
+                      <label for="register-email" class="label-material">Email      </label>
+                    </div>
+                    <div class="form-group">
+                      <input id="register-passowrd" type="password" name="password" required class="input-material">
+                      <label for="register-passowrd" class="label-material">Contraseña        </label>
+                    </div>
+                    <div class="form-group terms-conditions">
+                      <input id="license" type="checkbox" class="checkbox-template">
+                      <label for="license">Acepto los terminos y condiciones</label>
+                    </div>
+                    <input id="register" type="submit" value="Registrarse" class="btn btn-primary">
+                  </form><small>¿Ya tienes una cuenta? </small><a href="{% url 'login'%}" class="signup">Iniciar sesion</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

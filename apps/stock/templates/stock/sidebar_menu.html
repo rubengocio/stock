@@ -1,0 +1,56 @@
+{% load static %}
+<nav class="side-navbar">
+  <!-- Sidebar Header-->
+  <div class="sidebar-header d-flex align-items-center">
+    <div class="avatar"><img src="{% static 'stock/img/avatar-1.jpg' %}" alt="..." class="img-fluid rounded-circle"></div>
+    <div class="title">
+      <h1 class="h4">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+    </div>
+  </div>
+  <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
+  <ul class="list-unstyled">
+    <li class="active"> <a href="{% url 'index' %}"><i class="icon-home"></i>Pagina principal</a></li>
+    <li><a href="#clientes" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Clientes </a>
+      <ul id="clientes" class="collapse list-unstyled">
+        <li><a href="{% url 'client-list' %}">Listar</a></li>
+        <li><a href="{% url 'client-create' %}">Nuevo</a></li>
+      </ul>
+    </li>
+    <li><a href="#proveedores" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Proveedores </a>
+      <ul id="proveedores" class="collapse list-unstyled">
+        <li><a href="{% url 'provider_list' %}">Listar</a></li>
+        <li><a href="{% url 'provider' %}">Nuevo</a></li>
+      </ul>
+    </li>
+    <li><a href="#productos" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Productos </a>
+      <ul id="productos" class="collapse list-unstyled">
+        <li><a href="{% url 'product-list' %}">Listar</a></li>
+        <li><a href="{% url 'product-create' %}">Nuevo</a></li>
+        <li><a href="{% url 'import-export' %}">Importar/Exportar Productos</a></li>
+      </ul>
+    </li>
+    <li> <a href="#"> <i class="fa fa-bar-chart"></i>Reportes </a></li>
+    <li><a href="#configuracion" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Configuración </a>
+      <ul id="configuracion" class="collapse list-unstyled">
+        <li><a href="#categorias" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Categorias </a>
+          <ul id="categorias" class="collapse list-unstyled">
+            <li><a href="{% url 'category-list' %}">Listar</a></li>
+            <li><a href="{% url 'category-create' %}">Nuevo</a></li>
+          </ul>
+        </li>
+        <li><a href="#marcas" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Marcas </a>
+          <ul id="marcas" class="collapse list-unstyled">
+            <li><a href="{% url 'brand-list'%}">Listar</a></li>
+            <li><a href="{% url 'brand-create'%}">Nuevo</a></li>
+          </ul>
+        </li>
+        <li><a href="#unidadmedida" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Unidades de medida </a>
+          <ul id="unidadmedida" class="collapse list-unstyled">
+            <li><a href="{% url 'measurement-list' %}">Listar</a></li>
+            <li><a href="{% url 'measurement-create' %}">Nuevo</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

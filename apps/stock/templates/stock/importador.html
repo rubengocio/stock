@@ -1,0 +1,74 @@
+{% extends "stock/base.html" %}
+{% block 'body' %}
+<!-- Forms Section-->
+<!-- Page Header-->
+<ul class="breadcrumb">
+  <div class="container-fluid">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item active">Forms</li>
+  </div>
+</ul>
+<section class="forms">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Form Elements -->
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header d-flex align-items-center">
+            <h3 class="h4">Importar Productos</h3>
+          </div>
+          <div class="card-body">
+
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group row">
+                   <div class="col-sm-12">
+                      <div class="row">
+                           <div class="col-md-4">
+                              <!--<input class="form-control" type="file" name="file">-->
+                               {{form.as_p}}
+                           </div>
+                           <div class="col-md-8">
+                               <button type="submit" class="btn btn-primary">Upload</button>
+                           </div>
+                      </div>
+                   </div>
+              </div>
+              <div class="line"></div>
+            </form>
+            {% if result %}
+                  <div class="form-group row">
+                       <div class="col-sm-12">
+                          <div class="row">
+                              <div class="card-body">
+                                  <table class="table">
+                                    <thead>
+                                      <tr>
+                                        {% for col in columns %}
+                                            <th>{{col}}</th>
+                                        {% endfor %}
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for obj in result %}
+                                        <tr>
+                                            {% for value in obj.get_array_value %}
+                                                <td>{{ value }}</td>
+                                            {% endfor %}
+                                        </tr>
+                                      {% endfor %}
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                          </div>
+                       </div>
+                  </div>
+               {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

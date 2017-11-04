@@ -1,0 +1,118 @@
+{% extends "stock/base.html" %}
+{% block 'body' %}
+  <!-- Breadcrumb-->
+  <ul class="breadcrumb">
+    <div class="container-fluid">
+      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+      <li class="breadcrumb-item active">Tables</li>
+    </div>
+  </ul>
+<section class="tables">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header d-flex align-items-center">
+              <h3 class="h4">{{title}}</h3>
+            </div>
+            <div class="line"></div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                              <label class="form-control-label">Codigo de barras</label>
+                              <input id="barcode" type="text" class="form-control">
+                            </div>
+                            <div class="col-md-8">
+                              <label class="form-control-label">Producto</label>
+                              <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                              <label class="form-control-label">Categoria</label>
+                                <select name="account" class="form-control">
+                                    <option value="">----------</option>
+                                    {% for category in list_categories%}
+                                      <option value="{{ category.id }}">{{ category.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label class="form-control-label">Marca</label>
+                                <select name="account" class="form-control">
+                                    <option value="">----------</option>
+                                    {% for brand in list_brand %}
+                                      <option value="{{ brand.id }}">{{ brand.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label class="form-control-label">Unidad de Medida</label>
+                                <select name="account" class="form-control">
+                                    <option value="">----------</option>
+                                    {% for measure in list_measure%}
+                                      <option value="{{ measure.id }}">{{ measure.nombre }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                          </div>
+                      </div>
+                </div>
+            </div>
+            <div class="card-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                      <th>#</th>
+                    {% for col in cols%}
+                        <th>{{col}}</th>
+                    {% endfor %}
+                    <th>Accion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for obj in list %}
+                    <tr>
+                        <th scope="row">{{obj.id}}</th>
+                        {% for value in obj.get_array_value %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                        <td>
+                            <a href="{{ modificar }}/{{obj.id}}"><button type="button" class="btn btn-primary">Modificar</button></a>
+                            <a href="{{ eliminar }}/{{obj.id}}"><button type="button" class="btn btn-secondary">Eliminar</button></a>
+                        </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+{% endblock %}
+{% block 'js' %}
+    <script>
+        $(document).ready(function() {
+            var barcode="";
+            $('#barcode').keydown(function(e) {
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if(code==13)// Enter key hit
+                {
+                    alert(barcode);
+                }
+                else if(code==9)// Tab key hit
+                {
+                    alert(barcode);
+                }
+                else
+                {
+                    barcode=barcode+String.fromCharCode(code);
+                }
+            });
+        });
+    </script>
+{% endblock %}
