@@ -15,14 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-#from django.contrib.auth.views import logout, login
-from apps.stock.views.clients import register
+from stock.views.clients import register
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('apps.stock.urls')),
+    url(r'^', include('stock.urls')),
     url(r'^', include('smart_selects.urls')),
-    url(r'^accounts/', include('apps.accounts.urls')),
+    url(r'^accounts/', include('accounts.urls')),
+    url(r'^api/v1/', include('api.urls')),
     #url(r'^login/$', login, name='login', kwargs={'template_name': 'stock/login.html'}),
     #url(r'^login/$', login, name='login'),
     #url(r'^logout/$',logout,name='logout', kwargs={'next_page': '/'}),

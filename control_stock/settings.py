@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'django_extensions',
+    'rest_framework',
     'import_export',
-    'apps.stock',
-    'apps.accounts',
-    'smart_selects'
+    'stock',
+    'accounts',
+    'api',
+    'smart_selects',
+
+
 ]
 
 MIDDLEWARE = [
@@ -125,3 +129,8 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
