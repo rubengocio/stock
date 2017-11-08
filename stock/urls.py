@@ -7,6 +7,7 @@ from .views.brands import BrandListView, BrandCreateView, BrandUpdateView, Brand
 from .views.measurements import MeasurementListView, MeasurementCreateView, MeasurementUpdateView, MeasurementDeleteView
 from .views.products import ProductListView, ProductCreateView, ProductUpdateView, ProductDeleteView
 from .views.imports import upload
+from .views.box_daily import BoxView
 
 urlpatterns = [
     url(r'^$', home, name='index'),
@@ -41,4 +42,6 @@ urlpatterns = [
     url(r'^crear-medida/$', MeasurementCreateView.as_view(), name='measurement-create'),
     url(r'^editar-medida/(?P<pk>\d+)$', MeasurementUpdateView.as_view(), name='measurement-edit'),
     url(r'^eliminar-medida/(?P<pk>\d+)$', MeasurementDeleteView.as_view(), name='measurement-remove'),
+
+    url(r'^caja-diaria/$', BoxView.as_view(), name='box-daily'),
 ]

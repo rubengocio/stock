@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from random import choice
 from django import forms
-from .models import Cliente, Proveedor, Categoria, Marca, UnidadMedida, Producto
+from .models import Cliente, Proveedor, Categoria, Marca, UnidadMedida, Producto, Caja
 
 
 class ClienteForm(forms.ModelForm):
@@ -187,6 +187,22 @@ class UploadFileForm(forms.Form):
     saltar_primer_fila = forms.BooleanField(required=False)
     f = forms.FileInput(attrs={
     })
+
+
+class BoxForm(forms.ModelForm):
+
+    class Meta:
+        model = Caja
+        exclude = ()
+
+        widgets = {
+            'fecha_inicio': forms.DateTimeInput(attrs={
+                'class': 'form-control',
+            }),
+            'fecha_cierre': forms.DateTimeInput(attrs={
+                'class': 'form-control'
+            }),
+        }
 
 
 

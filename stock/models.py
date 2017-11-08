@@ -194,6 +194,15 @@ class Producto(models.Model):
             super(Producto, self).save(*args, **kwargs)
 
 
+class Caja(models.Model):
+    fecha_inicio = models.DateTimeField()
+    monto_inicio = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_cierre = models.DateTimeField()
+    monto_cierre = models.DecimalField(max_digits=10, decimal_places=2)
+    usuario = models.ForeignKey(User)
+
+    def __str__(self):
+        return '%s %s %s %s' % (self.fecha_inicio, self.fecha_cierre, self.usuario.first_name, self.usuario.last_name,)
 
 
 
