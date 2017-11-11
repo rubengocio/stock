@@ -7,6 +7,8 @@ from django.db import models
 # Create your models here.
 from django.db.models import Max
 
+from accounts.models import Sucursal
+
 
 class Cliente(models.Model):
     nombre = models.CharField(max_length=200, blank=False, null=False)
@@ -187,7 +189,7 @@ class Producto(models.Model):
         return False
 
     def save(self, *args, **kwargs):
-        super(Producto, self).save(force_insert=False, force_update=False, using=None ,update_fields=None)
+        super(Producto, self).save(force_insert=False, force_update=False, using=None, update_fields=None)
 
         if self.codigo_barra is None or self.codigo_barra == '':
             self.codigo_barra = self.__get_codigo_ean()
@@ -197,12 +199,31 @@ class Producto(models.Model):
 class Caja(models.Model):
     fecha_inicio = models.DateTimeField()
     monto_inicio = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha_cierre = models.DateTimeField()
-    monto_cierre = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_cierre = models.DateTimeField(null=True, blank=True)
+    monto_cierre = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     usuario = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return '%s %s %s %s' % (self.fecha_inicio, self.fecha_cierre, self.usuario.first_name, self.usuario.last_name,)
 
     def __str__(self):
         return '%s %s %s %s' % (self.fecha_inicio, self.fecha_cierre, self.usuario.first_name, self.usuario.last_name,)
+
+
+class Inventario(models.Model):
+    sucursal = models.ForeignKey(Sucursal)
+    producto = models.ForeignKey(Producto)
+    stock_actual = models.DecimalField(max_digits=10, decimal_places=2)
+    stock_minimo = models.DecimalField(max_digits=10, decimal_places=2)
+    stock_maximo = models.DecimalField(max_digits=10, decimal_places=2)
+    created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
+    updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
+
+    def __unicode__(self):
+        return '%s - %s' % (self.sucursal, self.producto)
+
+    def __str__(self):
+        return '%s - %s' % (self.sucursal, self.producto)
 
 
 

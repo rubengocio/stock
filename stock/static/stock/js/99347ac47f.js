@@ -3,7 +3,7 @@ window.FontAwesomeCdnConfig = {
     enabled: false
   },
   asyncLoading: {
-    enabled: false
+    enabled: true
   },
   reporting: {
     enabled: false

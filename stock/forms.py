@@ -12,32 +12,32 @@ class ClienteForm(forms.ModelForm):
 
         widgets = {
             'nombre': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
                 'required': 'required'
             }),
             'apellido': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'razon_social': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
             }),
             'documento': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'telefono': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'celular': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'direccion': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'iva': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
         }
 
@@ -50,26 +50,26 @@ class ProviderForm(forms.ModelForm):
 
         widgets = {
             'razon_social': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
                 'required': 'required'
             }),
             'cuit': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'telefono': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
             }),
             'direccion': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'telefono': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'contacto': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
             'email': forms.EmailInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
         }
 
@@ -82,11 +82,11 @@ class CategoryForm(forms.ModelForm):
 
         widgets = {
             'nombre': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
                 'required': 'required'
             }),
             'descripcion': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
         }
 
@@ -99,11 +99,11 @@ class BrandForm(forms.ModelForm):
 
         widgets = {
             'nombre': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
                 'required': 'required'
             }),
             'descripcion': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
         }
 
@@ -116,11 +116,11 @@ class MeasurementForm(forms.ModelForm):
 
         widgets = {
             'nombre': forms.TextInput(attrs={
-                'class': 'input-material',
+                'class': 'form-control',
                 'required': 'required'
             }),
             'descripcion': forms.TextInput(attrs={
-                'class': 'input-material'
+                'class': 'form-control'
             }),
         }
 
@@ -190,19 +190,18 @@ class UploadFileForm(forms.Form):
 
 
 class BoxForm(forms.ModelForm):
-
     class Meta:
         model = Caja
         exclude = ()
 
         widgets = {
-            'fecha_inicio': forms.DateTimeInput(attrs={
-                'class': 'form-control',
-            }),
-            'fecha_cierre': forms.DateTimeInput(attrs={
-                'class': 'form-control'
-            }),
+            'fecha_inicio': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_cierre': forms.TextInput(attrs={'class': 'form-control'}),
+            'monto_inicio': forms.TextInput(attrs={'class': 'form-control'}),
+            'monto_cierre': forms.TextInput(attrs={'class': 'form-control'})
         }
+
+
 
 
 

@@ -24,6 +24,7 @@
     <!-- Font Icons CSS-->
     <link rel="stylesheet" href="{% static 'stock/css/icons.css' %}">
 
+
     <style>
       .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
       .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
@@ -32,7 +33,8 @@
       .autocomplete-group { padding: 2px 5px; }
       .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
     </style>
-
+{% block 'head' %}
+{% endblock %}
   </head>
   <body>
     <div class="page home-page">

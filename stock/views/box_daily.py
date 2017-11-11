@@ -8,12 +8,14 @@ from stock.forms import BoxForm
 
 
 class BoxView(View):
+    template_name = "stock/box_form.html"
 
     def get(self, request, *args, **kwargs):
         form = BoxForm()
+
         context = {
-            'title': 'Caja diaria',
-            'form': form,
+            'title': 'Caja',
+            'form': form
         }
 
-        return render(request, 'stock/box_form.html', context)
+        return render(request, self.template_name, context)
