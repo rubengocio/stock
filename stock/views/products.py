@@ -5,8 +5,8 @@ from django.shortcuts import render
 from django.views import View
 from rest_framework.views import APIView
 
-from stock.forms import ProductForm
-from stock.models import Producto, Categoria, Marca
+from stock.forms import ProductForm, InventoryForm
+from stock.models import Producto, Categoria, Marca, Inventario
 
 
 class ProductListView(View):
@@ -41,27 +41,35 @@ class ProductCreateView(View):
     template_name = 'stock/product_form.html'
 
     def get(self, request, *args, **kwargs ):
-        form = ProductForm()
+        product_form = ProductForm()
+        inventory_form = InventoryForm()
 
         context = {
             'title': 'Producto',
-            'form': form
+            'product_form': product_form,
+            'inventory_form':inventory_form
         }
 
         return render(request, self.template_name, context)
 
     def post(self, request):
-        form = ProductForm(data=request.POST)
+        inventory_form = InventoryForm(data=request.POST)
+        product_form = ProductForm(data=request.POST)
 
-        if form.is_valid():
-            object = form.save(commit=False)
+        if inventory_form.is_valid() and product_form.is_valid():
+            object = inventory_form.save(commit=False)
 
             object.created_user = request.user
             object.save()
 
+            object2 = product_form.save(commit=False)
+            object2.created_user = request.user
+            object2.save()
+
             return HttpResponseRedirect(reverse('product-list'))
         context = {
-            'form': form
+            'product_form': product_form,
+            'inventory_form':inventory_form
         }
 
         return render(request, self.template_name, context)
@@ -72,29 +80,34 @@ class ProductUpdateView(View):
 
     def get(self, request, *args, **kwargs ):
         pk = kwargs.get('pk')
-        object = Producto.objects.get(pk=pk)
+        object = Inventario.objects.get(pk=pk)
 
-        form = ProductForm(instance=object)
+        inventory_form = InventoryForm(instance=object)
+        product_form = ProductForm(instance=object.producto)
 
         context = {
             'title': 'Producto',
-            'form': form
+            'inventory_form': inventory_form,
+            'product_form': product_form
         }
 
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
-        object = Producto.objects.get(pk=pk)
+        object = Inventario.objects.get(pk=pk)
 
-        form = ProductForm(data=request.POST, instance=object)
+        inventory_form = InventoryForm(data=request.POST, instance=object)
+        product_form = ProductForm(data=request.POST, instance=object.producto)
 
-        if form.is_valid():
-            form.save()
+        if inventory_form.is_valid() and product_form.is_valid():
+            inventory_form.save()
+            product_form.save()
 
             return HttpResponseRedirect(reverse('product-list'))
         context = {
-            'form': form
+            'inventory_form': inventory_form,
+            'product_form': product_form
         }
 
         return render(request, self.template_name, context)
@@ -104,6 +117,6 @@ class ProductDeleteView(View):
 
     def get(self, request, *args, **kwargs ):
         pk = kwargs.get('pk')
-        object = Producto.objects.get(pk=pk)
+        object = Inventario.objects.get(pk=pk)
         object.delete()
         return HttpResponseRedirect(reverse('product-list'))

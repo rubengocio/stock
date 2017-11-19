@@ -137,12 +137,14 @@
             category = $('#category').val();
             brand = $('#brand').val();
             measure = $('#measure').val();
+            sucursal = $('#sucursales').val();
 
             bar_code = (bar_code == null) ? '': bar_code;
             product = (product == null) ? '': product;
             category = (category == null) ? '': category;
             brand = (brand == null) ? '': brand;
             measure = (measure == null) ? '': measure;
+            sucursal = (sucursal == null) ? '': sucursal;
 
             if(bar_code == '' && product == '' && category == '' && brand == '' && measure == ''){
                 $('#registros').text('0');
@@ -159,14 +161,15 @@
             $('#products tbody tr').remove();
             $.ajax({
                 type: "GET",
-                url: "{% url 'api_product_list' %}",
+                url: "{% url 'api_inventory_list' %}",
                 data: {
                     page: page,
                     bar_code: bar_code,
                     product: product,
                     category: category,
                     brand: brand,
-                    measure: measure
+                    measure: measure,
+                    sucursal: sucursal
                 },
                 dataType: "json",   //expect html to be returned
                 success: function(response){

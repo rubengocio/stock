@@ -1,9 +1,12 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login as login_
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core import serializers
 
 # Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
 from .models import Perfil
 
 
@@ -21,6 +24,7 @@ def login(request):
         next = request.POST.get('next')
         request.session['sucursales'] = json
         request.session['empresa'] = empresa
+        request.session['sucursal'] = sucursales.first().id
 
         if user:
             login_(request, user)
@@ -32,4 +36,16 @@ def login(request):
 
     return render(request, 'accounts/login.html')
 
+@csrf_exempt
+def change_sucursal(request):
+    import json
+    if request.method == 'POST':
+        sucursal = request.POST.get('sucursal', None)
 
+        if sucursal:
+            request.session['sucursal'] = sucursal
+
+    return HttpResponse(
+        json.dumps({'status': 'ok'}),
+        content_type='application/json; charset=UTF-8'
+    )

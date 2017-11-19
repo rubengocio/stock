@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from random import choice
 from django import forms
-from .models import Cliente, Proveedor, Categoria, Marca, UnidadMedida, Producto, Caja
+from .models import Cliente, Proveedor, Categoria, Marca, UnidadMedida, Producto, Caja, Inventario
 
 
 class ClienteForm(forms.ModelForm):
@@ -126,14 +126,13 @@ class MeasurementForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
-
     class Meta:
         model = Producto
         exclude = ('created_user', 'created_date', 'updated_date')
 
         widgets = {
-            'codigo_barra': forms.TextInput(attrs={
-                'class': 'form-control'
+             'codigo_barra': forms.TextInput(attrs={
+                            'class': 'form-control'
             }),
             'nombre': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -145,9 +144,29 @@ class ProductForm(forms.ModelForm):
             'marca': forms.Select(attrs={
                 'class': 'form-control'
             }),
+
             'unidad_medida': forms.Select(attrs={
                 'class': 'form-control'
             }),
+        }
+
+
+class InventoryForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(InventoryForm, self).__init__(*args, **kwargs)
+        #self.fields['codigo_barra'].initial = ''
+        #self.fields['nombre'].initial = ''
+        #self.fields['categoria'].initial = ''
+        #self.fields['marca'].initial = ''
+        #self.fields['unidad_medida'].initial = ''
+
+    class Meta:
+        model = Inventario
+        exclude = ('created_user', 'created_date', 'updated_date')
+
+        widgets = {
+
 
             'precio_compra': forms.TextInput(attrs={
                 'class': 'form-control'

@@ -89,12 +89,35 @@
 
     <script>
       var jsonSucursales = JSON.parse("{{ request.session.sucursales | escapejs }}");
+      var sucursal = "{{ request.session.sucursal | escapejs }}";
       $( document ).ready(function() {
         $.each(jsonSucursales,function(key, value){
-          var option = '<option value=' + value.pk + '>' + value.fields.direccion + '</option>';
+          if(sucursal == value.pk){
+            var option = '<option value=' + value.pk + ' selected>' + value.fields.direccion + '</option>';
+          }else{
+            var option = '<option value=' + value.pk + '>' + value.fields.direccion + '</option>';
+            console.log(value.pk);
+            console.log(sucursal);
+          }
           $("#sucursales").append(option);
         });
       });
+    </script>
+
+    <script>
+      $("#sucursales").change(function(){
+          console.log('change sucursal');
+          var suc_id = $('#sucursales').val();
+          $.ajax({
+                type: "POST",
+                url: "{% url 'change_sucursal' %}",
+                data: {
+                    sucursal: suc_id
+                },
+                dataType: "json",   //expect html to be returned
+            });
+      });
+
     </script>
 
     {% block 'js' %}

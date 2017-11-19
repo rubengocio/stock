@@ -4,8 +4,48 @@ from __future__ import unicode_literals
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from api.serializers import ProductSerializer, CategorySerializer, MeasureSerializer, BrandSerializer
-from stock.models import Producto, Categoria, UnidadMedida, Marca
+from api.serializers import ProductSerializer, CategorySerializer, MeasureSerializer, BrandSerializer, \
+    InventorySerializer
+from stock.models import Producto, Categoria, UnidadMedida, Marca, Inventario
+
+
+class InventoryListView(ListCreateAPIView):
+    queryset = Inventario.objects.all().order_by('id')
+    serializer_class = InventorySerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+        sucursal = self.request.GET.get('sucursal', None)
+        bar_code = self.request.GET.get('bar_code', None)
+        product = self.request.GET.get('product', None)
+        category = self.request.GET.get('category', None)
+        brand = self.request.GET.get('brand', None)
+        measure = self.request.GET.get('measure', None)
+
+        if sucursal:
+            queryset = queryset.filter(sucursal=sucursal)
+
+        if bar_code:
+            queryset = queryset.filter(producto__codigo_barra=bar_code)
+
+        if product:
+            queryset = queryset.filter(producto__nombre__contains=product)
+
+        if category:
+            queryset = queryset.filter(producto__categoria__id=category)
+
+        if brand:
+            queryset = queryset.filter(producto__marca__id=brand)
+
+        if measure:
+            queryset = queryset.filter(producto__unidad_medida__id=measure)
+
+        return queryset
+
+
+class InventoryDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Inventario.objects.all()
+    serializer_class = InventorySerializer
 
 
 class ProductAutocompleteView(APIView):
@@ -34,6 +74,7 @@ class ProductListView(ListCreateAPIView):
         category = self.request.GET.get('category', None)
         brand = self.request.GET.get('brand', None)
         measure = self.request.GET.get('measure', None)
+
 
         if bar_code:
             queryset = queryset.filter(codigo_barra=bar_code)

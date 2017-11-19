@@ -123,12 +123,6 @@ class Producto(models.Model):
     unidad_medida = models.ForeignKey(UnidadMedida, null=True)
     precio_compra = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
     porcentaje_ganacia = models.DecimalField(null=True, max_digits=100, decimal_places=2)
-    stock_actual = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
-    stock_minimo = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
-    stock_maximo = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
-    estante = models.CharField(null=True, max_length=10)
-    fila = models.CharField(null=True, max_length=10)
-    columna = models.CharField(null=True, max_length=10)
     created_user = models.ForeignKey(User)
     created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
     updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
@@ -213,11 +207,54 @@ class Caja(models.Model):
 class Inventario(models.Model):
     sucursal = models.ForeignKey(Sucursal)
     producto = models.ForeignKey(Producto)
-    stock_actual = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_minimo = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_maximo = models.DecimalField(max_digits=10, decimal_places=2)
+    precio_compra = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    porcentaje_ganacia = models.DecimalField(null=True, max_digits=100, decimal_places=2)
+    stock_actual = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    stock_minimo = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    stock_maximo = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    estante = models.CharField(null=True, max_length=10)
+    fila = models.CharField(null=True, max_length=10)
+    columna = models.CharField(null=True, max_length=10)
     created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
     updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
+
+    class Meta:
+        unique_together = ('sucursal', 'producto',)
+
+    @property
+    def codigo_barra(self):
+        return '%s' % self.producto.codigo_barra
+
+    @property
+    def nombre(self):
+        return '%s' % self.producto.nombre
+
+    @property
+    def categoria(self):
+        return '%s' % self.producto.categoria
+
+    @property
+    def marca(self):
+        return '%s' % self.producto.marca
+
+    @property
+    def unidad_medida(self):
+        return '%s' % self.producto.unidad_medida
+
+    @property
+    def get_precio_compra(self):
+        if self.precio_compra:
+            return self.precio_compra
+        else:
+            return self.producto.precio_compra
+
+    @property
+    def get_porcentaje_ganacia(self):
+        if self.porcentaje_ganacia:
+            return self.porcentaje_ganacia
+        else:
+            return self.producto.porcentaje_ganacia
+
 
     def __unicode__(self):
         return '%s - %s' % (self.sucursal, self.producto)
