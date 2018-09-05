@@ -36,6 +36,19 @@ class BoxCreateView(View):
 
         return render(request, self.template_name, context)
 
+    def post(self, request, *args, **kwargs):
+        form = BoxForm(data=request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect(reverse('box-list'))
+        context = {
+            'form': form
+        }
+
+        return render(request, self.template_name, context)
+
 
 class BoxUpdateView(View):
     template_name = "stock/box_form.html"
