@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -13,14 +14,21 @@ class CategoryListView(View):
 
     def get(self, request,  *args, **kwargs):
 
+
         modificar = reverse('category-edit', kwargs={'pk': 1}).replace('/1','')
         eliminar = reverse('category-remove', kwargs={'pk': 1}).replace('/1','')
-        url_list = reverse('api_category_list')
+        url_list = reverse('category-list')
 
+        page=int(request.GET.get('page','1'))
+        objects=Categoria.objects.all()
+        paginator = Paginator(objects, 10)
+        objects = paginator.page(page)
+        #paginator.num_pages
         context = {
             'title': 'Categorias',
             'modificar': modificar,
             'eliminar': eliminar,
+            'objects': objects,
             'url_list': url_list
         }
 

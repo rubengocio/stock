@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 from random import choice
 from django import forms
-from .models import Cliente, Proveedor, Categoria, Marca, UnidadMedida, Producto, Caja, Inventario
+from datetime import datetime
+
+from commons import ErrList
+from .models import Cliente, Proveedor, Categoria, Marca, UnidadMedida, Producto, Caja, Inventario, Compra, \
+    ESTADO_COMPRA, PORC_IVA, Gasto, MESES
 
 
 class ClienteForm(forms.ModelForm):
@@ -73,6 +77,10 @@ class ProviderForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(ProviderForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
+
 
 class CategoryForm(forms.ModelForm):
 
@@ -89,6 +97,10 @@ class CategoryForm(forms.ModelForm):
                 'class': 'form-control'
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
 
 
 class BrandForm(forms.ModelForm):
@@ -107,6 +119,9 @@ class BrandForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(BrandForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
 
 class MeasurementForm(forms.ModelForm):
 
@@ -124,6 +139,9 @@ class MeasurementForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(MeasurementForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -150,24 +168,18 @@ class ProductForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(ProductForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
+
 
 class InventoryForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        super(InventoryForm, self).__init__(*args, **kwargs)
-        #self.fields['codigo_barra'].initial = ''
-        #self.fields['nombre'].initial = ''
-        #self.fields['categoria'].initial = ''
-        #self.fields['marca'].initial = ''
-        #self.fields['unidad_medida'].initial = ''
-
     class Meta:
         model = Inventario
-        exclude = ('created_user', 'created_date', 'updated_date')
+        exclude = ('created_user', 'created_date', 'updated_date', 'sucursal', 'producto')
 
         widgets = {
-
-
             'precio_compra': forms.TextInput(attrs={
                 'class': 'form-control'
             }),
@@ -195,6 +207,10 @@ class InventoryForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super(InventoryForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
+
 
 class UploadFileForm(forms.Form):
     DELIMITADOR = ((',', 'Coma (,)'), (';', 'Punto y Coma (;)'),('\t', 'Tabulacion'))
@@ -211,16 +227,103 @@ class UploadFileForm(forms.Form):
 class BoxForm(forms.ModelForm):
     class Meta:
         model = Caja
+        exclude = ('usuario',)
+
+        widgets = {
+            'fecha_inicio': forms.DateTimeInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'form-control'}
+            ),
+            'fecha_cierre': forms.DateTimeInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'form-control'},
+
+            ),
+            'monto_inicio': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'monto_cierre': forms.TextInput(
+                attrs={'class': 'form-control'}
+            )
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(BoxForm, self).__init__(*args, **kwargs)
+        self.error_class = ErrList
+
+
+class GastoForm(forms.ModelForm):
+    gastos = Gasto.objects.all()
+
+    anios = []
+    anios.append((str(datetime.now().year),str(datetime.now().year)))
+    for gasto in gastos:
+        anios.append((str(gasto.created_date__year),str(gasto.created_date__year)))
+
+    anios = list(set(anios))
+
+    anio = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+            },
+        ),
+        choices=anios,
+        label=u'Año'
+    )
+    mes = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+            }
+        ),
+        choices=MESES,
+
+    )
+
+
+    class Meta:
+        model = Gasto
         exclude = ()
 
         widgets = {
-            'fecha_inicio': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_cierre': forms.TextInput(attrs={'class': 'form-control'}),
-            'monto_inicio': forms.TextInput(attrs={'class': 'form-control'}),
-            'monto_cierre': forms.TextInput(attrs={'class': 'form-control'})
+
+            'created_date': forms.DateInput(attrs={'class': 'form-control'}),
+            'usuario': forms.TextInput(attrs={
+                                            'class': 'form-control',
+                                            'disabled': 'true',
+                                    },
+
+            ),
+            'comprobante': forms.Select(attrs={'class': 'form-control'}),
+            'nro_comprobante': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+            'monto': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 
+class CompraForm(forms.ModelForm):
+    class Meta:
+        model = Compra
+        exclude = ('usuario', 'created_date', 'updated_date' )
 
 
+    estado = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'disabled': 'true',
+            }
+        ),
+        choices=ESTADO_COMPRA
+    )
 
+    iva = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+            }
+        ),
+        choices=PORC_IVA
+
+    )

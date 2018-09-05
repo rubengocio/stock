@@ -1,0 +1,343 @@
+{% extends "stock/base.html" %}
+{% load static %}
+{% block 'body' %}
+<!-- Forms Section-->
+<ul class="breadcrumb">
+  <div class="container-fluid">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item active">Forms</li>
+  </div>
+</ul>
+<section class="forms">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Form Elements -->
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header d-flex align-items-center">
+            <h3 class="h4">{{title}}</h3>
+          </div>
+          <div class="card-body">
+            <form class="form-horizontal" method="post">
+              {% csrf_token %}
+                <input id="compra_id" type="hidden" value="{{ compra.id }}">
+                <div class="col-sm-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.proveedor.label }}</label>
+                            <select name="proveedor" required id="id_proveedor" class="form-control">
+                                <option value="">----------</option>
+                                {% for proveedor in proveedores %}
+                                    <option value="{{ category.id }}">{{ proveedor.razon_social }}</option>
+                                {% endfor %}
+                            </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.estado.label }}</label>
+                            {{ form.estado }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                                <label class="form-control-label">% Desc. 1</label>
+                                <input id="gen_descuento_1" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                                <label class="form-control-label">% Desc. 2</label>
+                                <input id="gen_descuento_2" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                                <label class="form-control-label">% Desc. 3</label>
+                                <input id="gen_descuento_3" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                                <label class="form-control-label">IVA</label>
+                                {{ form.iva }}
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                   <div class="card">
+                      <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Detalle</h3>
+                      </div>
+                       <br>
+                        <div class="row">
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">Cod. Prov</label>
+                                    <input id="cod_prov" type="text" class="form-control">
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                    <label class="form-control-label">Producto</label>
+                                    <input id="product" type="text" class="form-control" autocomplete="off">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">Cant</label>
+                                    <input id="cantidad" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">Prec. Unit.</label>
+                                    <input id="prec_unit" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">% Desc. 1</label>
+                                    <input id="descuento_1" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">% Desc. 2</label>
+                                    <input id="descuento_2" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">% Desc. 3</label>
+                                    <input id="descuento_3" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                    <label class="form-control-label">IVA</label>
+                                    <input id="iva" type="text" class="form-control" onkeypress="return isNumberKey(event,this)">
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <div class="form-group">
+                                   <br>
+                                   <button id="btn_add" type="button" class="btn btn-primary" onclick="agregar();">Agregar</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <table id="detalles" class="table">
+                                    <thead>
+                                      <tr>
+                                        <th>Cod. Prov</th>
+                                        <th>Producto</th>
+                                        <th>Cant</th>
+                                        <th>Prec. Unit.</th>
+                                        <th>% Desc. 1</th>
+                                        <th>% Desc. 2</th>
+                                        <th>% Desc. 3</th>
+                                        <th>IVA</th>
+                                        <th>Subtotal</th>
+                                        <th>Accion</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+
+                <div class="line"></div>
+                    <div class="form-group row">
+                    <div class="col-sm-12 offset-sm-5">
+                      <button type="button" class="btn btn-primary" onclick="guardar()">Guardar</button>
+                      <a href="{% url 'compra-list' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block 'js' %}
+    <script>
+      $(document).ready(function() {
+        var iva = $('#id_iva option:selected').val();
+        $('#iva').val(iva);
+
+        $('#id_iva').change(function(){
+            var iva = $('#id_iva option:selected').val();
+            $('#iva').val(iva);
+        });
+
+        $('#gen_descuento_1').keyup(function(e) {
+            var value = $(this).val();
+            $('#descuento_1').val(value);
+            var code = e.keyCode;
+            if(code==46 || code==8 || code == 9){
+                var value = $(this).val();
+                $('#descuento_1').val(value);
+            }
+        });
+
+        $('#gen_descuento_2').keyup(function(e) {
+            var value = $(this).val();
+            $('#descuento_2').val(value);
+            var code = e.keyCode;
+            if(code==46 || code==8 || code==9){
+                var value = $(this).val();
+                $('#descuento_2').val(value);
+            }
+        });
+
+        $('#gen_descuento_3').keyup(function(e) {
+            var value = $(this).val();
+            $('#descuento_3').val(value);
+            var code = e.keyCode;
+            if(code==46 || code==8 || code==9){
+                var value = $(this).val();
+                $('#descuento_3').val(value);
+            }
+        });
+
+        $('#product').autocomplete({
+            serviceUrl: "{% url 'api_product_autocomplete' %}",
+            minChars: 3,
+            dataType: 'json',
+            transformResult: function(response) {
+                return {
+                    suggestions: $.map(response, function(dataItem) {
+                        return { value: dataItem.value, data: dataItem.id };
+                    })
+                };
+            }
+        });
+      });
+
+
+    function isNumberKey(evt, obj) {
+        var max_length = 3
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        var value = obj.value;
+
+        if(value.split('.') && value.split('.')[1] && value.split('.')[1].length == max_length)
+            return false;
+
+        var dotcontains = value.indexOf(".") != -1;
+        if (dotcontains)
+            if (charCode == 46) return false;
+        if (charCode == 46) return true;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+
+      var agregar = function(){
+        var cod_prov = $('#cod_prov').val();
+        var product = $('#product').val();
+        var cantidad = $('#cantidad').val();
+        var prec_unit = $('#prec_unit').val();
+        var descuento_1 = $('#descuento_1').val();
+        var descuento_2 = $('#descuento_2').val();
+        var descuento_3 = $('#descuento_3').val();
+        var iva = $('#iva').val();
+        var subtotal = '';
+
+        if( cod_prov=='' || product=='' || cantidad=='' || prec_unit=='' || iva==''){
+            return;
+        }
+
+        var trHTML = '<tr>';
+        trHTML += '<td>' + cod_prov + '</td>';
+        trHTML += '<td>' + product + '</td>';
+        trHTML += '<td>' + cantidad + '</td>';
+        trHTML += '<td>' + prec_unit + '</td>';
+        trHTML += '<td>' + descuento_1 + '</td>';
+        trHTML += '<td>' + descuento_2 + '</td>';
+        trHTML += '<td>' + descuento_3 + '</td>';
+        trHTML += '<td>' + iva + '</td>';
+        trHTML += '<td>' + subtotal + '</td>';
+        trHTML += '<td align="center">';
+        trHTML += '<a class="btn btn-secondary" href="#"><em class="fa fa-pencil"></em></a>';
+        trHTML += '<a class="btn btn-danger" href="#"><em class="fa fa-trash"></em></a>';
+        trHTML += '</td>';
+        trHTML += '</tr>';
+        $('#detalles tbody').append(trHTML);
+        limpiar();
+        cargar();
+    }
+
+    var limpiar = function(){
+        $('#cod_prov').val('');
+        $('#product').val('');
+        $('#cantidad').val('');
+        $('#prec_unit').val('');
+        $('#descuento_1').val('');
+        $('#descuento_2').val('');
+        $('#descuento_3').val('');
+        $('#iva').val('');
+    }
+
+    var cargar = function(){
+        var descuento_1 = $('#gen_descuento_1').val();
+        var descuento_2 = $('#gen_descuento_2').val();
+        var descuento_3 = $('#gen_descuento_3').val();
+        var iva = $('#id_iva option:selected').val();
+
+        $('#descuento_1').val(descuento_1);
+        $('#descuento_2').val(descuento_2);
+        $('#descuento_3').val(descuento_3);
+        $('#iva').val(iva);
+    }
+
+    var array = []
+
+    var add_to_array = function(cod_prov, product, cantidad, prec_unit, descuento_1, descuento_2, descuento_3, iva){
+        var separador = '||';
+        var row = '' + cod_prov + separador +  product + separador + cantidad + separador + prec_unit + separador + descuento_1 + separador + descuento_2 + separador + descuento_3 + separador + iva;
+        array.push(row);
+    }
+
+
+    var guardar = function(){
+        var rows = $('#detalles tbody tr');
+
+        for(var i=0;i < rows.length; i++){
+            var cod_prov = rows[i].children[0].textContent;
+            var product = rows[i].children[1].textContent;
+            var cantidad = rows[i].children[2].textContent;
+            var prec_unit = rows[i].children[3].textContent;
+            var descuento_1 = rows[i].children[4].textContent;
+            var descuento_2 = rows[i].children[5].textContent;
+            var descuento_3 = rows[i].children[6].textContent;
+            var iva = rows[i].children[7].textContent;
+
+            add_to_array(cod_prov, product, cantidad, prec_unit, descuento_1, descuento_2, descuento_3, iva);
+        }
+
+        if(array.length > 0){
+            console.log(array);
+
+
+        }
+    }
+    </script>
+{% endblock %}

@@ -17,35 +17,52 @@
             <h3 class="h4">{{title}}</h3>
           </div>
           <div class="card-body">
+            {% for error in product_form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+            {{ product_form.non_field_errors }}
+            {% for error in inventory_form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+            {{ inventory_form.non_field_errors }}
             <form class="form-horizontal" method="post">
               {% csrf_token %}
               <div class="form-group row">
                 <div class="col-sm-12">
                   <div class="row">
-                    <div class="col-md-4">
-                      <label class="form-control-label">{{ product_form.codigo_barra.label }}</label>
+                    <div class="col-md-4 {% if product_form.codigo_barra.errors %}has-danger{% endif %}" >
+                      <label class="form-control-label" for="{{ product_form.codigo_barra.id_for_label }}">{{ product_form.codigo_barra.label }}</label>
                       {{ product_form.codigo_barra }}
+                      {{ product_form.codigo_barra.errors }}
                     </div>
-                    <div class="col-md-8">
-                      <label class="form-control-label">{{ product_form.nombre.label }}</label>
+                    <div class="col-md-8 {% if product_form.nombre.errors %}has-danger{% endif %}" >
+                      <label class="form-control-label" for="{{ product_form.nombre.id_for_label }}">{{ product_form.nombre.label }}</label>
                       {{ product_form.nombre }}
+                      {{ product_form.nombre.errors }}
                     </div>
                   </div>
                 </div>
                 <div class="line"></div>
                 <div class="col-sm-12">
                   <div class="row">
-                    <div class="col-md-4">
-                      <label class="form-control-label">{{ product_form.categoria.label }}</label>
+                    <div class="col-md-4 {% if product_form.categoria.errors %}has-danger{% endif %}" >
+                      <label class="form-control-label" for="{{ product_form.categoria.id_for_label }}">{{ product_form.categoria.label }}</label>
                       {{ product_form.categoria }}
+                      {{ product_form.categoria.errors }}
                     </div>
-                    <div class="col-md-4">
-                      <label class="form-control-label">{{ product_form.marca.label }}</label>
+                    <div class="col-md-4 {% if product_form.marca.errors %}has-danger{% endif %}" >
+                      <label class="form-control-label" for="{{ product_form.marca.id_for_label }}">{{ product_form.marca.label }}</label>
                       {{ product_form.marca }}
+                      {{ product_form.marca.errors }}
                     </div>
-                    <div class="col-md-4">
-                      <label class="form-control-label">{{ product_form.unidad_medida.label }}</label>
+                    <div class="col-md-4 {% if product_form.unidad_medida.errors %}has-danger{% endif %}" >
+                      <label class="form-control-label" for="{{ product_form.unidad_medida.id_for_label }}">{{ product_form.unidad_medida.label }}</label>
                       {{ product_form.unidad_medida }}
+                      {{ product_form.unidad_medida.errors }}
                     </div>
                   </div>
                 </div>
@@ -53,53 +70,61 @@
               <div class="line"></div>
               <div class="col-sm-12">
                 <div class="row">
-                  <div class="col-md-6">
-                    <label class="form-control-label">{{ inventory_form.precio_compra.label }}</label>
+                  <div class="form-group col-md-6 {% if inventory_form.precio_compra.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.precio_compra.id_for_label }}">{{ inventory_form.precio_compra.label }}</label>
                     {{ inventory_form.precio_compra }}
+                    {{ inventory_form.precio_compra.errors }}
                   </div>
-                  <div class="col-md-6">
-                    <label class="form-control-label">{{ inventory_form.porcentaje_ganacia.label }}</label>
+                  <div class="form-group col-md-6 {% if inventory_form.porcentaje_ganacia.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.porcentaje_ganacia.id_for_label }}">{{ inventory_form.porcentaje_ganacia.label }}</label>
                     {{ inventory_form.porcentaje_ganacia }}
+                    {{ inventory_form.porcentaje_ganacia.errors }}
                   </div>
                 </div>
               </div>
               <div class="line"></div>
               <div class="col-sm-12">
                 <div class="row">
-                  <div class="col-md-4">
-                    <label class="form-control-label">{{ inventory_form.stock_actual.label }}</label>
+                  <div class="col-md-4 {% if inventory_form.stock_actual.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.stock_actual.id_for_label }}">{{ inventory_form.stock_actual.label }}</label>
                     {{ inventory_form.stock_actual }}
+                    {{ inventory_form.stock_actual.errors }}
                   </div>
-                  <div class="col-md-4">
-                    <label class="form-control-label">{{ inventory_form.stock_minimo.label }}</label>
+                  <div class="col-md-4 {% if inventory_form.stock_minimo.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.stock_minimo.id_for_label }}">{{ inventory_form.stock_minimo.label }}</label>
                     {{ inventory_form.stock_minimo }}
+                    {{ inventory_form.stock_minimo.errors }}
                   </div>
-                  <div class="col-md-4">
-                    <label class="form-control-label">{{ inventory_form.stock_maximo.label }}</label>
+                  <div class="col-md-4 {% if inventory_form.stock_maximo.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.stock_maximo.id_for_label }}">{{ inventory_form.stock_maximo.label }}</label>
                     {{ inventory_form.stock_maximo }}
+                    {{ inventory_form.stock_maximo.errors }}
                   </div>
                 </div>
               </div>
               <div class="line"></div>
               <div class="col-sm-12">
                 <div class="row">
-                  <div class="col-md-4">
-                    <label class="form-control-label">{{ inventory_form.estante.label }}</label>
+                  <div class="col-md-4 {% if inventory_form.estante.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.estante.id_for_label }}">{{ inventory_form.estante.label }}</label>
                     {{ inventory_form.estante }}
+                    {{ inventory_form.estante.errors }}
                   </div>
-                  <div class="col-md-4">
-                    <label class="form-control-label">{{ inventory_form.fila.label }}</label>
+                  <div class="col-md-4 {% if inventory_form.fila.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.fila.id_for_label }}">{{ inventory_form.fila.label }}</label>
                     {{ inventory_form.fila }}
+                    {{ inventory_form.fila.errors }}
                   </div>
-                  <div class="col-md-4">
-                    <label class="form-control-label">{{ inventory_form.columna.label }}</label>
+                  <div class="col-md-4 {% if inventory_form.columna.errors %}has-danger{% endif %}" >
+                    <label class="form-control-label" for="{{ inventory_form.columna.id_for_label }}">{{ inventory_form.columna.label }}</label>
                     {{ inventory_form.columna }}
+                    {{ inventory_form.columna.errors }}
                   </div>
                 </div>
               </div>
               <div class="line"></div>
               <div class="form-group row">
-                <div class="col-sm-12 offset-sm-4">
+                <div class="col-sm-12 offset-sm-5">
                   <button type="submit" class="btn btn-primary">Guardar</button>
                   <a href="{% url 'product-list' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
                 </div>

@@ -723,7 +723,7 @@ nav.navbar .dropdown-menu a {
   background: #fff;
   padding: 10px 20px;
   font-size: 0.8em;
-  color: #777;
+  color: #292b2c;
   width: 100%;
 }
 
@@ -1524,7 +1524,7 @@ section.charts div[class*="col-"] {
 }
 
 .form-control-label {
-  color: #777;
+  color: #292b2c;
   font-weight: 300;
 }
 
@@ -1536,7 +1536,7 @@ button, input[type='submit'] {
 
 form label {
   font-size: 0.9em;
-  color: #777;
+  color: #292b2c;
   font-weight: 300;
 }
 
@@ -1662,7 +1662,7 @@ input.input-material ~ label.active {
 
 .input-group .dropdown-toggle {
   background: #f5f5f5;
-  color: #777;
+  color: #292b2c;
 }
 
 .input-group .checkbox-template, .input-group .radio-template {
@@ -1671,7 +1671,7 @@ input.input-material ~ label.active {
 
 .input-group ul.dropdown-menu {
   padding: 15px;
-  color: #777;
+  color: #292b2c;
   border-radius: 0;
 }
 

@@ -1,0 +1,249 @@
+{% extends "stock/base.html" %}
+{% load static %}
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'stock/css/jquery-ui.css' %}">
+{% endblock %}
+{% block 'body' %}
+<!-- Forms Section-->
+<ul class="breadcrumb">
+  <div class="container-fluid">
+    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+    <li class="breadcrumb-item active">Forms</li>
+  </div>
+</ul>
+<section class="forms">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Form Elements -->
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header d-flex align-items-center">
+            <h3 class="h4">{{title}}</h3>
+          </div>
+          <div class="card-body">
+            <form class="form-horizontal" method="post">
+              {% csrf_token %}
+               <div class="col-sm-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.anio.label }}</label>
+                            {{ form.anio }}
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.mes.label }}</label>
+                            <select name="mes" required id="id_mes" class="form-control">
+                                {% for mes in months %}
+                                    <option value="{{ mes.codigo }}" {% if month == mes.codigo %}selected{% endif %}>{{ mes.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+              <div class="col-sm-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.created_date.label }}</label>
+                            <input type="text" name="created_date" required class="form-control" id="id_created_date" value="{{ form.created_date.value|default:now }}"/>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.usuario.label }}</label>
+                            <input type="text" name="usuario" required class="form-control" id="id_usuario" value="{{ request.user.first_name }} {{ request.user.last_name }}" disabled="true"/>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+              <div class="col-sm-12">
+                  <div class="row">
+                    <div class="col-md-2">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.comprobante.label }}</label>
+                            {{ form.comprobante }}
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.nro_comprobante.label }}</label>
+                            {{ form.nro_comprobante }}
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.descripcion.label }}</label>
+                            {{ form.descripcion }}
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                            <label class="form-control-label">{{ form.monto.label }}</label>
+                            {{ form.monto }}
+                      </div>
+                    </div>
+                    <div class="col-md-1">
+                      <div class="form-group">
+                           <br>
+                           <button id="btn_add" type="button" class="btn btn-primary" onclick="agregar()">Agregar</button>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <table id="detalles" class="table">
+                            <thead>
+                              <tr>
+                                <th>Comprobante</th>
+                                <th>Nro. Comprobante</th>
+                                <th>Descripcion</th>
+                                <th>Monto</th>
+                                <th>Accion</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                    <div class="form-group row">
+                    <div class="col-sm-12 offset-sm-5">
+                      <button type="button" class="btn btn-primary" onclick="guardar()">Guardar</button>
+                      <a href="{% url 'compra-list' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block 'js' %}
+    <script src="{% static 'stock/js/jquery-ui.js' %}"></script>
+    <script src="{% static 'stock/js/jquery.ui.datepicker-es.js' %}"></script>
+    <script>
+       $(document).ready(function() {
+        $("#id_created_date").datepicker();
+
+        $("#id_created_date").change(function(){
+            var date = $("#id_created_date").val();
+            array = date.split("/");
+
+            $("#id_mes").val(parseInt(array[1]));
+            $("#id_anio").val(parseInt(array[2]));
+        });
+
+        $("#id_monto").keypress(function(evt){
+            var obj = $("#id_monto");
+            var max_length = 3
+
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            var value = obj.val();
+
+            if(value.split('.') && value.split('.')[1] && value.split('.')[1].length == max_length)
+                return false;
+
+            var dotcontains = value.indexOf(".") != -1;
+            if (dotcontains)
+                if (charCode == 46) return false;
+            if (charCode == 46) return true;
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        });
+      });
+
+
+      function isNumberKey(evt, obj) {
+        console.log(obj);
+        var max_length = 3
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        var value = obj.value;
+
+        if(value.split('.') && value.split('.')[1] && value.split('.')[1].length == max_length)
+            return false;
+
+        var dotcontains = value.indexOf(".") != -1;
+        if (dotcontains)
+            if (charCode == 46) return false;
+        if (charCode == 46) return true;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+      }
+
+
+      var agregar = function(){
+        var comprobante = $('#id_comprobante option:selected').text();
+        var nro_comprobante = $('#id_nro_comprobante').val();
+        var descripcion = $('#id_descripcion').val();
+        var monto = $('#id_monto').val();
+
+        if( comprobante=='' || nro_comprobante=='' || descripcion=='' || monto==''){
+            return;
+        }
+
+        var trHTML = '<tr>';
+        trHTML += '<td>' + comprobante + '</td>';
+        trHTML += '<td>' + nro_comprobante + '</td>';
+        trHTML += '<td>' + descripcion + '</td>';
+        trHTML += '<td>' + monto + '</td>';
+        trHTML += '<td align="center">';
+        trHTML += '<a class="btn btn-secondary" href="#"><em class="fa fa-pencil"></em></a>';
+        trHTML += '<a class="btn btn-danger" href="#"><em class="fa fa-trash"></em></a>';
+        trHTML += '</td>';
+        trHTML += '</tr>';
+        $('#detalles tbody').append(trHTML);
+        limpiar();
+    }
+
+    var limpiar = function(){
+        $('#id_nro_comprobante').val('');
+        $('#id_descripcion').val('');
+        $('#id_monto').val('');
+    }
+
+    var array = []
+
+    var add_to_array = function(comprobante, nro_comprobante, descripcion, monto){
+        var separador = '||';
+        var row = '' + comprobante + separador +  nro_comprobante + separador + descripcion + separador + monto;
+        array.push(row);
+    }
+
+
+    var guardar = function(){
+        var rows = $('#detalles tbody tr');
+
+        for(var i=0;i < rows.length; i++){
+            var cod_prov = rows[i].children[0].textContent;
+            var product = rows[i].children[1].textContent;
+            var cantidad = rows[i].children[2].textContent;
+            var prec_unit = rows[i].children[3].textContent;
+            var descuento_1 = rows[i].children[4].textContent;
+            var descuento_2 = rows[i].children[5].textContent;
+            var descuento_3 = rows[i].children[6].textContent;
+            var iva = rows[i].children[7].textContent;
+
+            add_to_array(cod_prov, product, cantidad, prec_unit, descuento_1, descuento_2, descuento_3, iva);
+        }
+
+        if(array.length > 0){
+            console.log(array);
+
+            
+        }
+    }
+    </script>
+{% endblock %}

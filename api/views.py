@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from api.pagination import CustomPagination
 from api.serializers import ProductSerializer, CategorySerializer, MeasureSerializer, BrandSerializer, \
     InventorySerializer
 from stock.models import Producto, Categoria, UnidadMedida, Marca, Inventario
@@ -102,6 +104,7 @@ class ProductDetailView(RetrieveUpdateDestroyAPIView):
 class CategoryListView(ListCreateAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategorySerializer
+    #pagination_class = CustomPagination
 
 
 class MeasureListView(ListCreateAPIView):

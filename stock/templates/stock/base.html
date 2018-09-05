@@ -24,7 +24,6 @@
     <!-- Font Icons CSS-->
     <link rel="stylesheet" href="{% static 'stock/css/icons.css' %}">
 
-
     <style>
       .autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
       .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
@@ -33,6 +32,46 @@
       .autocomplete-group { padding: 2px 5px; }
       .autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
     </style>
+
+    <style>
+        /* Pagination links */
+        .center {
+            text-align: center;
+        }
+        .pagination {
+            display: inline-block;
+        }
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+            border: 1px solid #ddd; /* Gray */
+        }
+
+        /* Style the active/current link */
+        .pagination a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        /* Add a grey background color on mouse-over */
+        .pagination a:hover:not(.active) {background-color: #ddd;}
+
+        .is-invalid {
+            border-color: #dc3545;
+        }
+
+        .invalid-feedback {
+            display: true;
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+    </style>
+
 {% block 'head' %}
 {% endblock %}
   </head>
@@ -79,7 +118,8 @@
     </div>
 
     <!-- Javascript files-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>-->
+    <script src="{% static 'stock/js/jquery.min.js' %}"></script>
     <script src="{% static 'stock/js/tether.min.js' %}"></script>
     <script src="{% static 'stock/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'stock/js/jquery.cookie.js' %}"> </script>

@@ -1,5 +1,7 @@
 
 from django.conf.urls import url
+
+from stock.views.gastos import GastoCreateView
 from .views.providers import ProviderListView, ProviderCreateView, ProviderUpdateView, ProviderDeleteView
 from .views.clients import ClientCreateView, ClientListView, ClientUpdateView, ClientDeleteView,  home
 from .views.categories import CategoryListView, CategoryCreateView, CategoryUpdateView, CategoryDeleteView
@@ -7,7 +9,8 @@ from .views.brands import BrandListView, BrandCreateView, BrandUpdateView, Brand
 from .views.measurements import MeasurementListView, MeasurementCreateView, MeasurementUpdateView, MeasurementDeleteView
 from .views.products import ProductListView, ProductCreateView, ProductUpdateView, ProductDeleteView
 from .views.imports import upload
-from .views.box_daily import BoxView
+from .views.box_daily import BoxCreateView, BoxListView, BoxUpdateView, BoxDeleteView, BoxCloseView
+from .views.compras import CompraCreateView, CompraListView, CompraUpdateView, CompraDeleteView
 
 urlpatterns = [
     url(r'^$', home, name='index'),
@@ -19,7 +22,7 @@ urlpatterns = [
     url(r'^eliminar-producto/(?P<pk>\d+)$',ProductDeleteView.as_view(), name='product-remove'),
 
     url(r'^listar-proveedores/$',ProviderListView.as_view(), name='provider_list'),
-    url(r'^crear-proveedor/$',ProviderCreateView.as_view(), name='provider'),
+    url(r'^crear-proveedor/$',ProviderCreateView.as_view(), name='provider-create'),
     url(r'^editar-proveedor/(?P<pk>\d+)$',ProviderUpdateView.as_view(), name='provider-detail'),
     url(r'^elimnar-proveedor/(?P<pk>\d+)$',ProviderDeleteView.as_view(), name='provider-remove'),
 
@@ -43,5 +46,16 @@ urlpatterns = [
     url(r'^editar-medida/(?P<pk>\d+)$', MeasurementUpdateView.as_view(), name='measurement-edit'),
     url(r'^eliminar-medida/(?P<pk>\d+)$', MeasurementDeleteView.as_view(), name='measurement-remove'),
 
-    url(r'^caja-diaria/$', BoxView.as_view(), name='box-daily'),
+    url(r'^caja-diaria/$', BoxCreateView.as_view(), name='box-daily'),
+    url(r'^listar-caja/$', BoxListView.as_view(), name='box-list'),
+    url(r'^editar-caja/(?P<pk>\d+)$', BoxUpdateView.as_view(), name='box-edit'),
+    url(r'^cerrar-caja/(?P<pk>\d+)$', BoxCloseView.as_view(), name='box-close'),
+    url(r'^eliminar-caja/(?P<pk>\d+)$', BoxDeleteView.as_view(), name='box-remove'),
+
+    url(r'^listar-compras/$', CompraListView.as_view(), name='compra-list'),
+    url(r'^editar-compra/(?P<pk>\d+)$', CompraUpdateView.as_view(), name='compra-edit'),
+    url(r'^crear-compra/$', CompraCreateView.as_view(), name='compra-create'),
+    url(r'^eliminar-compra/(?P<pk>\d+)$', CompraDeleteView.as_view(), name='compra-remove'),
+
+    url(r'crear-gasto/$', GastoCreateView.as_view(), name='gasto-create'),
 ]

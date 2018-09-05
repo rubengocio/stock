@@ -11,95 +11,58 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-12">
-          <div class="card">
+            <div class="card">
             <div class="card-header d-flex align-items-center">
               <h3 class="h4">{{title}}</h3>
             </div>
-            <div class="card-body">
-              <table id="table" class="table">
-                <thead>
-                  <tr>
-                      <th>#</th>
-                      <th>Nombre</th>
-                      <th>Accion</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
+            <div id="content" class="card-body">
+                <table id="table" class="table">
+                    <thead>
+                      <tr>
+                          <th>#</th>
+                          <th>Nombre</th>
+                          <th>Accion</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in objects %}
+                            <tr>
+                                <td>{{object.id}}</td>
+                                <td>{{object.nombre}}</td>
+                                <td align="center">
+                                    <a class="btn btn-secondary" href="{{ modificar }}/{{object.id}}"><em class="fa fa-pencil"></em></a>
+                                    <a class="btn btn-danger" href="{{ eliminar }}/{{object.id}}"><em class="fa fa-trash"></em></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
               </table>
-              <div class="form-group row">
-                <div class="col-sm-12">
-                    <label id="registros"></label> registros encontrados
-                    <center>
-                        <button id="anterior" class="btn">Anterior</button>
-                        <button id="siguiente" class="btn">Siguiente</button>
-                    </center>
-
+                <div class="center">
+                   <div class="pagination">
+                    {% if objects.has_previous %}
+                      <a href="?page={{ objects.previous_page_number }}">&laquo;</a>
+                    {% else %}
+                      <a class="disabled"><span>&laquo;</span></a>
+                    {% endif %}
+                    {% for i in objects.paginator.page_range %}
+                      {% if objects.number == i %}
+                        <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                      {% else %}
+                       <a href="?page={{ i }}">{{ i }}</a>
+                      {% endif %}
+                    {% endfor %}
+                    {% if categorias.has_next %}
+                      <a href="?page={{ objects.next_page_number }}">&raquo;</a>
+                    {% else %}
+                      <a class="disabled"><span>&raquo;</span></a>
+                    {% endif %}
+                  </div>
                 </div>
-              </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
 </section>
-{% endblock %}
-{% block 'js' %}
-<script>
-        $(document).ready(function() {
-            $('#registros').text('0');
-            $('#siguiente').hide();
-            $('#anterior').hide();
-            fillTable(1);
-        });
-
-        var fillTable = function(page){
-
-            if(page == null){
-                page=1;
-            }
-
-            $('#table tbody tr').remove();
-            $.ajax({
-                type: "GET",
-                url: "{{ url_list }}",
-                data: {
-                    page: page
-                },
-                dataType: "json",
-                success: function(response){
-                    var trHTML = '';
-                    $('#registros').text(response.count);
-
-                    if(response.next != null){
-                        $('#siguiente').attr("onclick", "fillTable(" + (page + 1) +")");
-                        $('#siguiente').show();
-                    }else{
-                        $('#siguiente').hide();
-                    }
-
-                    if(response.previous != null){
-                        $('#anterior').attr("onclick", "fillTable(" + (page - 1) +")");
-                        $('#anterior').show();
-                    }else{
-                        $('#anterior').hide();
-                    }
-
-                    $.each(response.results, function (i, item) {
-                        trHTML += '<tr>';
-                        trHTML += '<td>' + item.id + '</td>';
-                        trHTML += '<td>' + item.nombre + '</td>';
-                        trHTML += '<td align="center">';
-                        trHTML += '<a class="btn btn-secondary" href="'+ '{{ modificar }}/' + item.id + '"><em class="fa fa-pencil"></em></a>';
-                        trHTML += '<a class="btn btn-danger" href="'+ '{{ eliminar }}/' + item.id + '"><em class="fa fa-trash"></em></a>';
-                        trHTML += '</td>';
-                        trHTML += '</tr>';
-                        $('#table tbody').append(trHTML);
-                        trHTML = '';
-                    });
-                }
-            });
-        }
-    </script>
 {% endblock %}

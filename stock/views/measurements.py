@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -14,13 +15,19 @@ class MeasurementListView(View):
     def get(self, request,  *args, **kwargs):
         modificar = reverse('measurement-edit', kwargs={'pk': 1}).replace('/1','')
         eliminar = reverse('measurement-remove', kwargs={'pk': 1}).replace('/1','')
-        url_list = reverse('api_measure_list')
+        url_list = reverse('measurement-list')
+
+        page = int(request.GET.get('page', '1'))
+        objects = UnidadMedida.objects.all()
+        paginator = Paginator(objects, 10)
+        objects = paginator.page(page)
 
         context = {
             'title': 'Unidades de medida',
             'modificar': modificar,
             'eliminar': eliminar,
-            'url_list': url_list
+            'url_list': url_list,
+            'objects':objects
         }
 
         return render(request, self.template_name, context)

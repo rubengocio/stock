@@ -17,13 +17,66 @@
             <h3 class="h4">Proveedor</h3>
           </div>
           <div class="card-body">
-
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+            {{ form.non_field_errors }}
             <form class="form-horizontal" method="post">
               {% csrf_token %}
-            {{form.as_p}}
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.razon_social.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.razon_social.id_for_label }}">{{ form.razon_social.label }}</label>
+                      {{ form.razon_social }}
+                      {{ form.razon_social.errors }}
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.cuit.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.cuit.id_for_label }}">{{ form.cuit.label }}</label>
+                      {{ form.cuit }}
+                      {{ form.cuit.errors }}
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.telefono.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+                      {{ form.telefono }}
+                      {{ form.telefono.errors }}
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.direccion.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.direccion.id_for_label }}">{{ form.direccion.label }}</label>
+                      {{ form.direccion }}
+                      {{ form.direccion.errors }}
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.telefono.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+                      {{ form.telefono }}
+                      {{ form.telefono.errors }}
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.contacto.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.contacto.id_for_label }}">{{ form.contacto.label }}</label>
+                      {{ form.contacto }}
+                      {{ form.contacto.errors }}
+                  </div>
+              </div>
+              <div class="col-md-12">
+                  <div class="form-group row {% if form.email.errors %}has-danger{% endif %}">
+                      <label class="form-control-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                      {{ form.email }}
+                      {{ form.email.errors }}
+                  </div>
+              </div>
               <div class="line"></div>
               <div class="form-group row">
-                <div class="col-sm-4 offset-sm-3">
+                <div class="col-sm-5 offset-sm-5">
                   <button type="submit" class="btn btn-primary">Guardar</button>
                   <a href="{% url 'provider_list' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
                 </div>

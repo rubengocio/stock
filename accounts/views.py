@@ -17,14 +17,17 @@ def login(request):
         user = authenticate(username=username, password=passwords)
         perfil = Perfil.objects.get(user=user)
         empresa = perfil.empresa.razon_social
+        empresa_id=perfil.empresa.id
         sucursales = perfil.sucursales.all()
-
+        open_box = perfil.get_open_box
         json = serializers.serialize('json', sucursales )
 
         next = request.POST.get('next')
         request.session['sucursales'] = json
         request.session['empresa'] = empresa
         request.session['sucursal'] = sucursales.first().id
+        request.session['open_box'] = open_box.id if open_box else 0
+        request.session['empresa_id']=empresa_id
 
         if user:
             login_(request, user)

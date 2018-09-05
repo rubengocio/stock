@@ -25,7 +25,7 @@
   </head>
   <body>
     {% block 'body' %}
-    {% endblock %}
+    {% endblock 'body' %}
     <!-- Javascript files-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="{% static 'stock/js/tether.min.js' %}"></script>
@@ -33,7 +33,7 @@
     <script src="{% static 'stock/js/jquery.cookie.js' %}"> </script>
     <script src="{% static 'stock/js/jquery.validate.min.js' %}"></script>
     <script src="{% static 'stock/js/front.js' %}"></script>
-    {% block js%}
-    {% endblock %}
+    {% block 'js' %}
+    {% endblock 'js' %}
   </body>
 </html>

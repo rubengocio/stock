@@ -2,7 +2,7 @@
 <nav class="side-navbar">
   <!-- Sidebar Header-->
   <div class="sidebar-header d-flex align-items-center">
-    <div class="avatar"><img src="{% static 'stock/img/if_monitor_24_51413.png' %}" alt="..." class="img-fluid rounded-circle"></div>
+    <div class="avatar"><img src="{% static 'stock/img/ico_user_2.png' %}" alt="..." class="img-fluid rounded-circle"></div>
     <div class="title">
       <h1 class="h4">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
     </div>
@@ -19,7 +19,7 @@
     <li><a href="#proveedores" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Proveedores </a>
       <ul id="proveedores" class="collapse list-unstyled">
         <li><a href="{% url 'provider_list' %}">Listar</a></li>
-        <li><a href="{% url 'provider' %}">Nuevo</a></li>
+        <li><a href="{% url 'provider-create' %}">Nuevo</a></li>
       </ul>
     </li>
     <li><a href="#productos" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Productos </a>
@@ -31,10 +31,23 @@
     </li>
     <li><a href="#caja" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Caja </a>
       <ul id="caja" class="collapse list-unstyled">
-        <li><a href="{% url 'box-daily' %}">Listar</a></li>
-        <li><a href="{% url 'box-daily' %}">Nuevo</a></li>
+        <li><a href="{% url 'box-list' %}">Listar</a></li>
+        {% if request.session.open_box %}
+          <li><a href="{% url 'box-close' request.session.open_box %}">Cerrar caja</a></li>
+        {% else %}
+          <li><a href="{% url 'box-daily'%}">Abrir caja</a></li>
+        {% endif %}
+        <li><a href="{% url 'gasto-create' %}">Gastos</a></li>
       </ul>
     </li>
+    {% if request.session.open_box %}
+      <li><a href="#compra" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Compras </a>
+        <ul id="compra" class="collapse list-unstyled">
+          <li><a href="{% url 'compra-list' %}">Listar</a></li>
+          <li><a href="{% url 'compra-create'%}">Nueva</a></li>
+        </ul>
+      </li>
+    {% endif %}
     <li> <a href="#"> <i class="fa fa-bar-chart"></i>Reportes </a></li>
     <li><a href="#configuracion" aria-expanded="false" data-toggle="collapse"> <i class="icon-interface-windows"></i>Configuración </a>
       <ul id="configuracion" class="collapse list-unstyled">
@@ -46,7 +59,7 @@
         </li>
         <li><a href="#marcas" aria-expanded="false" data-toggle="collapse"> <i class="icon-padnote"></i>Marcas </a>
           <ul id="marcas" class="collapse list-unstyled">
-            <li><a href="{% url 'brand-list'%}">Listar</a></li>
+            <li><a href="{% url 'brand-list' %}">Listar</a></li>
             <li><a href="{% url 'brand-create'%}">Nuevo</a></li>
           </ul>
         </li>

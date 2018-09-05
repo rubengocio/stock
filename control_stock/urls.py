@@ -27,4 +27,5 @@ urlpatterns = [
     #url(r'^login/$', login, name='login'),
     #url(r'^logout/$',logout,name='logout', kwargs={'next_page': '/'}),
     url(r'^register/$',register,name='register'),
+
 ]

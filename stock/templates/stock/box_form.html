@@ -21,21 +21,28 @@
             <h3 class="h4">{{title}}</h3>
           </div>
           <div class="card-body">
+             {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+            {{ form.non_field_errors }}
             <form class="form-horizontal" method="post">
               {% csrf_token %}
-                <input id="box_id" type="hidden" value="{{ box.id }}">
                 <div class="col-sm-12">
                   <div class="row">
                     <div class="col-md-6">
-                      <div class="form-group">
-                            <label class="form-control-label">{{ form.fecha_inicio.label }}</label>
-                            <input type="text" name="fecha_inicio" required class="form-control" id="id_fecha_inicio" />
+                      <div class="form-group {% if form.fecha_inicio.errors %}has-danger{% endif %}">
+                            <label class="form-control-label"  for="{{ form.fecha_inicio.id_for_label }}">{{ form.fecha_inicio.label }}</label>
+                            {{ form.fecha_inicio }}
+                            {{ form.fecha_inicio.errors }}
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <div class="form-group">
-                            <label class="form-control-label">{{ form.fecha_cierre.label }}</label>
-                            <input type="text" name="fecha_cierre" required class="form-control" id="id_fecha_cierre" />
+                      <div class="form-group {% if form.fecha_cierre.errors %}has-danger{% endif %}">
+                            <label class="form-control-label" for="{{ form.fecha_cierre.id_for_label }}">{{ form.fecha_cierre.label }}</label>
+                            {{ form.fecha_cierre }}
+                            {{ form.fecha_cierre.errors }}
                       </div>
                     </div>
                   </div>
@@ -43,24 +50,26 @@
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-md-6">
-                          <div class="form-group">
-                                <label class="form-control-label">{{ form.monto_inicio.label }}</label>
+                          <div class="form-group {% if form.monto_inicio.errors %}has-danger{% endif %}">
+                                <label class="form-control-label" for="{{ form.monto_inicio.id_for_label }}">{{ form.monto_inicio.label }}</label>
                                 {{ form.monto_inicio }}
+                                {{ form.monto_inicio.errors }}
                           </div>
                         </div>
                         <div class="col-md-6">
-                          <div class="form-group">
-                                <label class="form-control-label">{{ form.monto_cierre.label }}</label>
+                          <div class="form-group {% if form.monto_cierre.errors %}has-danger{% endif %}">
+                                <label class="form-control-label" for="{{ form.monto_cierre.id_for_label }}">{{ form.monto_cierre.label }}</label>
                                 {{ form.monto_cierre }}
+                                {{ form.monto_cierre.errors }}>
                           </div>
                         </div>
                     </div>
                 </div>
                 <div class="line"></div>
                     <div class="form-group row">
-                    <div class="col-sm-12 offset-sm-4">
-                      <button type="submit" class="btn btn-primary">Guardar</button>
-                      <a href="{% url 'product-list' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
+                    <div class="col-sm-12 offset-sm-5">
+                      <button type="submit" class="btn btn-primary">{% if action == 'close'%}Cerrar{% else %}Guardar{% endif %}</button>
+                      <a href="{% url 'box-list' %}"><button type="button" class="btn btn-secondary">Cancelar</button></a>
                     </div>
                 </div>
             </form>
@@ -86,5 +95,37 @@
             $('#id_fecha_cierre').attr('disabled');
         }
       });
+    </script>
+
+    <script>
+        $('#id_monto_cierre').keypress(function(evt){
+            cant_decimales = 2;
+            el = $('#id_monto_cierre');
+            var charCode = (evt.which) ? evt.which : event.keyCode;
+            var number = el.val().split('.');
+            var caracter = el.val();
+
+            if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+
+            if (charCode == 46 && caracter == "") {
+                return false;
+            }
+
+            if (charCode == 46 && caracter.indexOf(".") != -1) {
+                return false;
+            }
+
+            if(number.length > 1){
+                if(number[1].length < cant_decimales){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            return true;
+        });
+
     </script>
 {% endblock %}

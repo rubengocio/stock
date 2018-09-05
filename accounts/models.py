@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from smart_selects.db_fields import ChainedManyToManyField
 
-# Create your models here.
+
+
+
 class Empresa(models.Model):
     razon_social = models.CharField(max_length=255)
     created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
@@ -44,5 +46,11 @@ class Perfil(models.Model):
     @property
     def get_sucursales(self):
         return self.sucursales
+
+    @property
+    def get_open_box(self):
+        from stock.models import Caja
+        box = Caja.objects.filter(usuario=self.user).first()
+        return box
 
 

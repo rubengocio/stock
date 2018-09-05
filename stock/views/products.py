@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
 from rest_framework.views import APIView
 
+from accounts.models import Sucursal
 from stock.forms import ProductForm, InventoryForm
 from stock.models import Producto, Categoria, Marca, Inventario
 
@@ -55,16 +56,22 @@ class ProductCreateView(View):
     def post(self, request):
         inventory_form = InventoryForm(data=request.POST)
         product_form = ProductForm(data=request.POST)
+        sucursal_id=request.session['sucursal']
+        user= request.user
 
-        if inventory_form.is_valid() and product_form.is_valid():
-            object = inventory_form.save(commit=False)
+        sucursal = get_object_or_404(Sucursal, pk=sucursal_id)
+        product=None
+        if product_form.is_valid():
+            product = product_form.save(commit=False)
+            product.created_user = user
+            product.save()
 
-            object.created_user = request.user
-            object.save()
-
-            object2 = product_form.save(commit=False)
-            object2.created_user = request.user
-            object2.save()
+        if inventory_form.is_valid() and product:
+            inventory= inventory_form.save(commit=False)
+            inventory.created_user = user
+            inventory.producto=product
+            inventory.sucursal=sucursal
+            inventory.save()
 
             return HttpResponseRedirect(reverse('product-list'))
         context = {

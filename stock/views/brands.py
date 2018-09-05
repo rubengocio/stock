@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -15,13 +16,19 @@ class BrandListView(View):
 
         modificar = reverse('brand-edit', kwargs={'pk': 1}).replace('/1','')
         eliminar = reverse('brand-remove', kwargs={'pk': 1}).replace('/1','')
-        url_list = reverse('api_brand_list')
+        url_list = reverse('brand-list')
+
+        page = int(request.GET.get('page', '1'))
+        objects = Marca.objects.all()
+        paginator = Paginator(objects, 10)
+        objects = paginator.page(page)
 
         context = {
             'title': 'Marcas',
             'modificar': modificar,
             'eliminar': eliminar,
-            'url_list': url_list
+            'url_list': url_list,
+            'objects': objects,
         }
 
         return render(request, self.template_name, context)

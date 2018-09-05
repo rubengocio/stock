@@ -10,6 +10,22 @@ from django.db.models import Max
 from accounts.models import Sucursal
 
 
+MESES = (
+    (1, 'Enero'),
+    (2, 'Febrero'),
+    (3, 'Marzo'),
+    (4, 'Abril'),
+    (5, 'Mayo'),
+    (6, 'Junio'),
+    (7, 'Julio'),
+    (8, 'Agosto'),
+    (9, 'Septiembre'),
+    (10, 'Octubre'),
+    (11, 'Noviembre'),
+    (12, 'Diciembre'),
+)
+
+
 class Cliente(models.Model):
     nombre = models.CharField(max_length=200, blank=False, null=False)
     apellido = models.CharField(max_length=200, blank=False, null=False)
@@ -32,7 +48,7 @@ class Cliente(models.Model):
 
 
 class Proveedor(models.Model):
-    razon_social = models.CharField(max_length=200, blank=False, null=True, unique=True)
+    razon_social = models.CharField(max_length=200, unique=True)
     cuit = models.CharField(max_length=20, blank=True, null=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
     direccion = models.CharField(max_length=200, blank=True, null=True)
@@ -116,8 +132,8 @@ class UnidadMedida(models.Model):
 
 
 class Producto(models.Model):
-    codigo_barra = models.CharField(max_length=13,blank=True, null=True)
-    nombre = models.CharField(max_length=250,blank=False, null=False)
+    codigo_barra = models.CharField(max_length=13,blank=True, null=True, unique=True)
+    nombre = models.CharField(max_length=250,blank=False, null=False, unique=True)
     categoria = models.ForeignKey(Categoria, null=True)
     marca = models.ForeignKey(Marca, null=True)
     unidad_medida = models.ForeignKey(UnidadMedida, null=True)
@@ -203,6 +219,49 @@ class Caja(models.Model):
     def __str__(self):
         return '%s %s %s %s' % (self.fecha_inicio, self.fecha_cierre, self.usuario.first_name, self.usuario.last_name,)
 
+ESTADO_COMPRA = (
+    (0, 'Nueva'),
+    (1, 'Entrega pendiente'),
+    (2, 'Entrega completa'),
+)
+
+
+class Compra(models.Model):
+    proveedor = models.ForeignKey(Proveedor)
+    usuario = models.ForeignKey(User)
+    estado = models.IntegerField(choices=ESTADO_COMPRA, default=1)
+    created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
+    updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
+
+
+class CodigoProducto(models.Model):
+    producto = models.ForeignKey(Producto)
+    proveedor = models.ForeignKey(Proveedor)
+    codigo = models.CharField(max_length=10, default='')
+
+
+ESTADO_DETALLE_COMPRA = (
+    (1, 'No recibido'),
+    (2, 'Recibido')
+)
+
+PORC_IVA = (
+    (21, '21 %'),
+    (10.5, '10.5 %'),
+)
+
+class DetalleCompra(models.Model):
+    codigo_producto = models.ForeignKey(CodigoProducto)
+    precio_unitario = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    descuento1 = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    descuento2 = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    descuento3 = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    iva = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    subtotal = models.DecimalField(null=True, max_digits=999999, decimal_places=2)
+    estado = models.IntegerField(choices=ESTADO_DETALLE_COMPRA, default=1)
+    created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
+    updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
+
 
 class Inventario(models.Model):
     sucursal = models.ForeignKey(Sucursal)
@@ -261,6 +320,46 @@ class Inventario(models.Model):
 
     def __str__(self):
         return '%s - %s' % (self.sucursal, self.producto)
+
+
+class Comprobante(models.Model):
+    nombre = models.CharField(max_length=100, blank=False, null=False, unique=True)
+    descripcion = models.CharField(max_length=100, blank=True, null=True)
+    created_user = models.ForeignKey(User)
+    created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
+    updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
+
+    def __str__(self):
+        return '%s' % (self.nombre)
+
+    def __unicode__(self):
+        return '%s' % (self.nombre)
+
+
+class Gasto(models.Model):
+    created_date = models.DateTimeField('Fecha')
+    usuario = models.ForeignKey(User)
+    comprobante = models.ForeignKey(Comprobante, default=1)
+    nro_comprobante = models.CharField(max_length=20, null=True)
+    descripcion = models.CharField(max_length=256)
+    monto = models.DecimalField(max_digits=12, decimal_places=2)
+
+
+class Mes(models.Model):
+    codigo = models.IntegerField(blank=False, null=False, unique=True)
+    nombre = models.CharField(max_length=100, blank=False, null=False, unique=True)
+    created_user = models.ForeignKey(User)
+    created_date = models.DateTimeField('Fecha de creacion:', auto_now_add=True)
+    updated_date = models.DateTimeField('Fecha de actualizacion:', auto_now=True)
+
+    def __str__(self):
+        return '%s' % (self.nombre)
+
+    def __unicode__(self):
+        return '%s' % (self.nombre)
+
+
+
 
 
 
